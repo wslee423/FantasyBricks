@@ -58,7 +58,7 @@
 | OD-012 | Firebase Crashlytics 도입 여부 | QUALITY_SCORE.md, RELIABILITY.md, SECURITY.md | 도입 시 개인정보처리방침 업데이트 필요 |
 | OD-013 | 체크섬 알고리즘 (SHA-256 vs CRC32) | SECURITY.md | |
 | OD-014 | 스테이지 JSON 에셋 번들 방식 — assets 폴더 vs 코드 내 하드코딩 | ARCHITECTURE.md | |
-| OD-015 | Flame 버전 고정 (1.x 최신 마이너 버전 확인) | ARCHITECTURE.md | |
+| OD-015 | ~~Flame 버전 고정~~ | ARCHITECTURE.md | ✅ 완료 — 아래 참고 |
 | OD-016 | 광고 SDK 선택 — AdMob vs Unity Ads | ARCHITECTURE.md | |
 
 ---
@@ -81,4 +81,5 @@
 
 | ID | 항목 | 결정 내용 | 완료 시점 |
 |----|------|----------|----------|
+| OD-015 | Flame 버전 고정 | `flame: ^1.18.0` — Flutter 설치 후 `flutter pub get` 시 최신 1.x 마이너 자동 적용 | Phase 0 |
 | - | - | - | - |

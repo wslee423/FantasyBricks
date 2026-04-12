@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(flutter --version)",
+      "Bash(dart --version)",
+      "Bash(where flutter:*)",
+      "Bash(where dart:*)",
+      "Read(//c/flutter/**)",
+      "Read(//d/flutter/**)",
+      "Read(//c//**)",
+      "Read(//d//**)",
+      "Read(//e//**)"
+    ]
+  }
+}
