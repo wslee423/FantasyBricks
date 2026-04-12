@@ -9,13 +9,13 @@ class BallComponent extends CircleComponent with CollisionCallbacks {
   Vector2 velocity;
   bool isLaunched = false;
 
-  BallComponent({required Vector2 position})
+  BallComponent({required Vector2 position, Color skinColor = const Color(0xFFFFFFFF)})
       : velocity = Vector2(200, -defaultSpeed),
         super(
           radius: ballRadius,
           anchor: Anchor.center,
           position: position,
-          paint: Paint()..color = const Color(0xFFFFFFFF),
+          paint: Paint()..color = skinColor,
         );
 
   @override

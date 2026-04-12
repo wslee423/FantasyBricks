@@ -3,8 +3,9 @@ import '../../game/brick_breaker_game.dart';
 
 class ClearedOverlay extends StatelessWidget {
   final BrickBreakerGame game;
+  final VoidCallback? onLobby;
 
-  const ClearedOverlay({super.key, required this.game});
+  const ClearedOverlay({super.key, required this.game, this.onLobby});
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +47,16 @@ class ClearedOverlay extends StatelessWidget {
               ),
               child: const Text('다시 하기'),
             ),
+            if (onLobby != null) ...[
+              const SizedBox(height: 12),
+              TextButton(
+                onPressed: onLobby,
+                child: const Text(
+                  '로비로',
+                  style: TextStyle(color: Colors.white54, fontSize: 16),
+                ),
+              ),
+            ],
           ],
         ),
       ),

@@ -5,6 +5,9 @@ class LocalStorage {
   static const _keyCurrentStage = 'current_stage';
   static const _keyTutorialDone = 'tutorial_done';
   static const _keyStagePrefix = 'stage_stars_';
+  static const _keyEquippedSkin = 'equipped_skin';
+  static const _keyOwnedSkins = 'owned_skins';
+  static const _keyFragments = 'fragments';
 
   static SharedPreferences? _prefs;
 
@@ -21,6 +24,8 @@ class LocalStorage {
   static int getCoins() => _p.getInt(_keyCoins) ?? 0;
   static Future<void> addCoins(int amount) =>
       _p.setInt(_keyCoins, getCoins() + amount);
+  static Future<void> spendCoins(int amount) =>
+      _p.setInt(_keyCoins, (getCoins() - amount).clamp(0, 99999));
 
   // 현재 스테이지 (잠금 해제된 최대 스테이지)
   static int getCurrentStage() => _p.getInt(_keyCurrentStage) ?? 1;
@@ -47,4 +52,30 @@ class LocalStorage {
   // 튜토리얼 완료 여부
   static bool isTutorialDone() => _p.getBool(_keyTutorialDone) ?? false;
   static Future<void> setTutorialDone() => _p.setBool(_keyTutorialDone, true);
+
+  // 장착 볼 스킨
+  static String getEquippedSkin() => _p.getString(_keyEquippedSkin) ?? 'fire_red';
+  static Future<void> setEquippedSkin(String skinId) =>
+      _p.setString(_keyEquippedSkin, skinId);
+
+  // 보유 스킨 목록 (쉼표 구분 문자열)
+  static List<String> getOwnedSkins() {
+    final raw = _p.getString(_keyOwnedSkins) ?? 'fire_red';
+    return raw.split(',').where((s) => s.isNotEmpty).toList();
+  }
+
+  static Future<void> addOwnedSkin(String skinId) async {
+    final owned = getOwnedSkins();
+    if (!owned.contains(skinId)) {
+      owned.add(skinId);
+      await _p.setString(_keyOwnedSkins, owned.join(','));
+    }
+  }
+
+  // 파편
+  static int getFragments() => _p.getInt(_keyFragments) ?? 0;
+  static Future<void> addFragments(int count) =>
+      _p.setInt(_keyFragments, getFragments() + count);
+  static Future<void> spendFragments(int count) =>
+      _p.setInt(_keyFragments, (getFragments() - count).clamp(0, 99999));
 }

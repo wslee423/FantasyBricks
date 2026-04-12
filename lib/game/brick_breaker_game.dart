@@ -11,6 +11,7 @@ import 'systems/collision_system.dart';
 import 'systems/item_system.dart';
 import 'systems/stage_loader.dart';
 import '../data/local_storage.dart';
+import '../data/gacha_data.dart';
 
 enum GameState { waiting, playing, cleared, gameOver }
 
@@ -27,19 +28,26 @@ class BrickBreakerGame extends FlameGame
   final List<CannonLaserComponent> _lasers = [];
   final ItemSystem itemSystem = ItemSystem();
 
+  Color get _ballSkinColor {
+    final skin = GachaData.findById(LocalStorage.getEquippedSkin());
+    return skin?.color ?? const Color(0xFFFFFFFF);
+  }
+
   final ValueNotifier<int> livesNotifier = ValueNotifier(3);
   final ValueNotifier<String?> toastNotifier = ValueNotifier(null);
   int get lives => livesNotifier.value;
   set lives(int v) => livesNotifier.value = v;
 
   GameState state = GameState.waiting;
-  int currentStageId = 1;
+  int currentStageId;
+
+  BrickBreakerGame({int startStageId = 1}) : currentStageId = startStageId;
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
     overlays.add(overlayHud);
-    await _loadStage(1);
+    await _loadStage(currentStageId);
   }
 
   Future<void> _loadStage(int stageId) async {
@@ -74,6 +82,7 @@ class BrickBreakerGame extends FlameGame
     final ball = _BallWithCollision(
       position: Vector2(_paddle.position.x, _paddle.position.y - 20),
       game: this,
+      skinColor: _ballSkinColor,
     );
     _balls.add(ball);
     add(ball);
@@ -202,9 +211,9 @@ class BrickBreakerGame extends FlameGame
         final ballWithCollision = _BallWithCollision(
           position: b.position.clone(),
           game: this,
+          skinColor: _ballSkinColor,
         )
           ..velocity = b.velocity.clone()
-          ..paint = b.paint
           ..isLaunched = true;
         _balls.add(ballWithCollision);
         add(ballWithCollision);
@@ -251,7 +260,11 @@ class BrickBreakerGame extends FlameGame
 class _BallWithCollision extends BallComponent {
   final BrickBreakerGame game;
 
-  _BallWithCollision({required super.position, required this.game});
+  _BallWithCollision({
+    required super.position,
+    required this.game,
+    super.skinColor = const Color(0xFFFFFFFF),
+  });
 
   @override
   void onCollisionStart(
