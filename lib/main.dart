@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'data/local_storage.dart';
+import 'data/ad_service.dart';
 import 'ui/lobby/lobby_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await LocalStorage.init();
+  await AdService.init();
   runApp(const FantasyBricksApp());
 }
 

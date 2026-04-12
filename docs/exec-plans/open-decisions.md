@@ -23,7 +23,7 @@
 
 | ID | 항목 | 출처 | 비고 |
 |----|------|------|------|
-| OD-001 | 게임 타이틀/앱 이름 결정 | PLANS.md, DESIGN.md | 스토어 등록 전 필수 |
+| ~~OD-001~~ | ~~게임 타이틀/앱 이름 결정~~ | PLANS.md | ✅ 완료 — 아래 참고 |
 | OD-002 | Google Play 개발자 계정 등록 여부 확인 | PLANS.md | $25 1회 결제 |
 
 ---
@@ -55,11 +55,11 @@
 
 | ID | 항목 | 출처 | 비고 |
 |----|------|------|------|
-| OD-012 | Firebase Crashlytics 도입 여부 | QUALITY_SCORE.md, RELIABILITY.md, SECURITY.md | 도입 시 개인정보처리방침 업데이트 필요 |
+| ~~OD-012~~ | ~~Firebase Crashlytics 도입 여부~~ | QUALITY_SCORE.md | ✅ 완료 — 아래 참고 |
 | OD-013 | 체크섬 알고리즘 (SHA-256 vs CRC32) | SECURITY.md | |
 | OD-014 | 스테이지 JSON 에셋 번들 방식 — assets 폴더 vs 코드 내 하드코딩 | ARCHITECTURE.md | |
 | OD-015 | ~~Flame 버전 고정~~ | ARCHITECTURE.md | ✅ 완료 — 아래 참고 |
-| OD-016 | 광고 SDK 선택 — AdMob vs Unity Ads | ARCHITECTURE.md | |
+| ~~OD-016~~ | ~~광고 SDK 선택 — AdMob vs Unity Ads~~ | ARCHITECTURE.md | ✅ 완료 — 아래 참고 |
 
 ---
 
@@ -69,7 +69,7 @@
 |----|------|------|------|
 | OD-017 | 배경 디테일 — 단순 그라데이션 vs 파티클 배경 애니메이션 | DESIGN.md | |
 | OD-018 | 스테이지 클리어 연출 수준 — 간단한 팝업 vs 풀스크린 연출 | DESIGN.md | |
-| OD-019 | 가챠 연출 스타일 — 카드 플립 vs 마법진 소환 풀 애니메이션 | FRONTEND.md, gacha-system.md | |
+| ~~OD-019~~ | ~~가챠 연출 스타일~~ | gacha-system.md | ✅ 완료 — 아래 참고 |
 | OD-020 | 10스테이지 클리어 후 무한모드 추가 여부 | product-specs/index.md, stage-system.md | |
 | OD-021 | 전설 등급 천장 시스템 추가 여부 | gacha-system.md | |
 | OD-022 | HP5 벽돌 등장 스테이지 제한 여부 | brick-system.md | |
@@ -82,6 +82,10 @@
 | ID | 항목 | 결정 내용 | 완료 시점 |
 |----|------|----------|----------|
 | OD-015 | Flame 버전 고정 | `flame: ^1.18.0` — Flutter 설치 후 `flutter pub get` 시 최신 1.x 마이너 자동 적용 | Phase 0 |
+| OD-001 | 게임 타이틀/앱 이름 | **Fantasy Bricks** — 전체 코드에 이미 반영됨 | Phase 3 |
+| OD-012 | Firebase Crashlytics | **미도입** — 백엔드 없는 구조 일관성 유지, 개인정보처리방침 불필요 | Phase 3 |
+| OD-016 | 광고 SDK | **google_mobile_ads (AdMob)** — 배너 + 리워드, Flutter 공식 지원 | Phase 3 |
+| OD-019 | 가챠 연출 | **페이드인 + 빛 번짐 이펙트** — 판타지 분위기, 작업량 소 | Phase 3 |
 | OD-003 | 스테이지 간 라이프 유지 vs 매 스테이지 3개 리셋 | **스테이지 간 유지 (옵션 A)** — 라이프가 다음 스테이지로 이어짐 | Phase 1 |
 | OD-005 | 마법 분열구 분열 각도 | **현재 볼 방향 기준 ±30° 랜덤 (옵션 B)** | Phase 1 |
 | OD-007 | 아이템 타격 횟수 | **10회** (기존 20회에서 기획 조정) | Phase 1 |

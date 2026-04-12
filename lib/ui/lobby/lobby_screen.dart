@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import '../../data/local_storage.dart';
+import '../../data/ad_service.dart';
 import '../gacha/gacha_screen.dart';
 import '../collection/collection_screen.dart';
 import '../game_screen.dart';
@@ -16,26 +18,40 @@ class _LobbyScreenState extends State<LobbyScreen> {
 
   int _coins = 0;
   int _unlockedStage = 1;
+  int _todayAdCount = 0;
+  BannerAd? _bannerAd;
+  bool _adLoading = false;
 
   @override
   void initState() {
     super.initState();
     _refresh();
+    _loadBanner();
+  }
+
+  @override
+  void dispose() {
+    AdService.disposeBanner();
+    super.dispose();
   }
 
   void _refresh() {
     setState(() {
       _coins = LocalStorage.getCoins();
       _unlockedStage = LocalStorage.getCurrentStage();
+      _todayAdCount = LocalStorage.getTodayAdCount();
     });
+  }
+
+  Future<void> _loadBanner() async {
+    final ad = await AdService.loadBanner();
+    if (mounted) setState(() => _bannerAd = ad);
   }
 
   void _onStageTap(int stageId) {
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (_) => GameScreenWrapper(stageId: stageId),
-      ),
+      MaterialPageRoute(builder: (_) => GameScreenWrapper(stageId: stageId)),
     ).then((_) => _refresh());
   }
 
@@ -53,6 +69,26 @@ class _LobbyScreenState extends State<LobbyScreen> {
     ).then((_) => _refresh());
   }
 
+  Future<void> _onAdTap() async {
+    if (_adLoading || !LocalStorage.canWatchAd()) return;
+    setState(() => _adLoading = true);
+
+    final success = await AdService.showRewarded();
+    if (mounted) {
+      if (success) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('마법 코인 +5 획득!'),
+            backgroundColor: Color(0xFF2A6020),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
+      _refresh();
+      setState(() => _adLoading = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,7 +98,9 @@ class _LobbyScreenState extends State<LobbyScreen> {
           children: [
             _buildHeader(),
             Expanded(child: _buildStageGrid()),
+            _buildAdButton(),
             _buildBottomBar(),
+            if (_bannerAd != null) _buildBannerAd(),
           ],
         ),
       ),
@@ -129,9 +167,57 @@ class _LobbyScreenState extends State<LobbyScreen> {
     );
   }
 
+  Widget _buildAdButton() {
+    final remaining = LocalStorage.maxDailyAds - _todayAdCount;
+    final canWatch = remaining > 0;
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
+      child: GestureDetector(
+        onTap: canWatch ? _onAdTap : null,
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          decoration: BoxDecoration(
+            color: canWatch ? const Color(0xFF1A4020) : const Color(0xFF0D1A0D),
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(
+              color: canWatch ? const Color(0xFF44BB44) : const Color(0xFF1A3020),
+            ),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (_adLoading)
+                const SizedBox(
+                  width: 16, height: 16,
+                  child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white54),
+                )
+              else
+                Icon(
+                  Icons.play_circle_outline,
+                  color: canWatch ? const Color(0xFF44BB44) : Colors.white24,
+                  size: 20,
+                ),
+              const SizedBox(width: 8),
+              Text(
+                canWatch
+                    ? '광고 시청 +${AdService.rewardCoins}코인 (오늘 $remaining회 남음)'
+                    : '오늘 광고 시청 완료 (내일 다시)',
+                style: TextStyle(
+                  color: canWatch ? const Color(0xFF88DD88) : Colors.white24,
+                  fontSize: 13,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildBottomBar() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
       child: Row(
         children: [
           Expanded(
@@ -155,6 +241,14 @@ class _LobbyScreenState extends State<LobbyScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildBannerAd() {
+    return SizedBox(
+      width: _bannerAd!.size.width.toDouble(),
+      height: _bannerAd!.size.height.toDouble(),
+      child: AdWidget(ad: _bannerAd!),
     );
   }
 }

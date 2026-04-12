@@ -12,7 +12,8 @@
       "Read(//e//**)",
       "Bash(flutter test:*)",
       "Bash(flutter analyze:*)",
-      "Bash(flutter build:*)"
+      "Bash(flutter build:*)",
+      "Bash(flutter pub:*)"
     ]
   }
 }

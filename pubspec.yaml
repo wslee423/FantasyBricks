@@ -16,6 +16,7 @@ dependencies:
   shared_preferences: ^2.2.0
   flutter_riverpod: ^2.4.0
   flame_audio: ^2.1.0
+  google_mobile_ads: ^5.1.0  # OD-016: AdMob 배너 + 리워드 광고
 
 dev_dependencies:
   flutter_test:

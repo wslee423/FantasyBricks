@@ -8,6 +8,9 @@ class LocalStorage {
   static const _keyEquippedSkin = 'equipped_skin';
   static const _keyOwnedSkins = 'owned_skins';
   static const _keyFragments = 'fragments';
+  static const _keyAdDate = 'ad_date';
+  static const _keyAdCount = 'ad_count';
+  static const int maxDailyAds = 5;
 
   static SharedPreferences? _prefs;
 
@@ -78,4 +81,25 @@ class LocalStorage {
       _p.setInt(_keyFragments, getFragments() + count);
   static Future<void> spendFragments(int count) =>
       _p.setInt(_keyFragments, (getFragments() - count).clamp(0, 99999));
+
+  // 일일 광고 시청 (날짜가 바뀌면 자동 리셋)
+  static String _today() {
+    final now = DateTime.now();
+    return '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
+  }
+
+  static int getTodayAdCount() {
+    final savedDate = _p.getString(_keyAdDate) ?? '';
+    if (savedDate != _today()) return 0;
+    return _p.getInt(_keyAdCount) ?? 0;
+  }
+
+  static bool canWatchAd() => getTodayAdCount() < maxDailyAds;
+
+  static Future<void> recordAdWatched() async {
+    final today = _today();
+    final count = getTodayAdCount();
+    await _p.setString(_keyAdDate, today);
+    await _p.setInt(_keyAdCount, count + 1);
+  }
 }
