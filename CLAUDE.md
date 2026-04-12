@@ -42,10 +42,8 @@ flutter test           # 전체 통과
 
 ## 현재 개발 단계
 
-**Phase 0 — 프로젝트 셋업 전**
-Flutter 프로젝트 미생성. `PLANS.md` 참고.
-
-단계별 진입 전 해당 Phase 목표와 체크리스트를 먼저 확인한다.
+`docs/exec-plans/phase-gates.md`에서 현재 Phase와 완료 조건을 확인한다.
+Phase 진입 전 해당 Phase의 gate 조건이 충족됐는지 먼저 확인한다.
 
 ---
 
