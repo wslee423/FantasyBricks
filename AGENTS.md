@@ -179,6 +179,9 @@ GitHub Actions: 빌드 / 테스트 자동 실행
 **QA → Stage Builder**
 - `flutter test` 전체 통과
 - 핵심 4개 파일(`ball`, `paddle`, `collision_system`, `item_system`) 각각 테스트 1개 이상 존재
+- 새로 추가된 UI overlay/HUD가 있을 경우: **상태 반응성 테스트** 1개 이상 존재
+  - 검증 기준: 게임 상태(`ValueNotifier` 등) 변경 시 위젯이 올바르게 리빌드되는가
+  - 근거: `QUALITY_SCORE.md` 테스트 유형 분류 참고
 
 **Stage Builder → Doc Agent**
 - `/run-qa` 스테이지 JSON 검증 전체 통과

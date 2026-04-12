@@ -18,12 +18,12 @@
 다음이 모두 충족돼야 Phase 1을 시작할 수 있다.
 
 ```
-- [ ] flutter create 완료, 앱이 에뮬레이터에서 실행됨  ← 🔴 Flutter 미설치 (사람 액션 필요)
+- [x] flutter create 완료, 앱이 에뮬레이터에서 실행됨  ← Pixel 7 에뮬레이터 확인 (2026-04-12)
 - [x] pubspec.yaml에 필수 패키지 추가 완료
       (flame, hive, shared_preferences, riverpod, flame_audio)
 - [x] ARCHITECTURE.md의 폴더 구조 생성 완료
-- [ ] flutter analyze 경고 0개  ← Flutter 설치 후 실행 가능
-- [ ] flutter test 통과 (기본 생성 테스트)  ← Flutter 설치 후 실행 가능
+- [x] flutter analyze 경고 0개  ← 통과 (2026-04-12)
+- [x] flutter test 통과 (기본 생성 테스트)  ← 통과 (2026-04-12)
 - [x] GitHub Actions 워크플로 생성 완료 (.github/workflows/ci.yml)
 - [ ] GitHub Actions 동작 확인 (push 후 Actions 탭에서 확인)  ← push 후 확인 필요
 - [x] OD-015 (Flame 버전) 결정 완료 — flame ^1.18.0
@@ -34,17 +34,17 @@
 ## Phase 1 → Phase 2 Gate (MVP 완료)
 
 ```
-- [ ] APK 빌드 성공 (flutter build apk)
-- [ ] 패들 조작 자연스러움 (수동 확인)
-- [ ] 볼 반사각 자연스러움 (수동 확인)
-- [ ] 볼 이탈 후 패들 위 재생성 + 탭 발사 정상 작동
-- [ ] 마법 분열구 효과 체감됨 (수동 확인)
-- [ ] 클리어/실패 판정 정상 작동
-- [ ] 60fps 유지 — 마법 분열구 활성화 상태에서도
-- [ ] flutter analyze 경고 0개
-- [ ] flutter test 전체 통과
-- [ ] OD-003 (라이프 유지 여부) 결정 완료
-- [ ] OD-005 (분열 각도) 결정 완료
+- [x] APK 빌드 성공 (flutter build apk)  ← debug APK 빌드 완료 (2026-04-12)
+- [x] 패들 조작 자연스러움 (수동 확인)  ← 확인 (2026-04-12)
+- [x] 볼 반사각 자연스러움 (수동 확인)  ← 확인 (2026-04-12)
+- [x] 볼 이탈 후 패들 위 재생성 + 탭 발사 정상 작동  ← 확인 (2026-04-12)
+- [x] 마법 분열구 효과 체감됨 (수동 확인)  ← 확인 (2026-04-12)
+- [x] 클리어/실패 판정 정상 작동  ← 클리어/게임오버 오버레이 구현 완료 (2026-04-12)
+- [x] 60fps 유지 — 마법 분열구 활성화 상태에서도  ← 확인 (2026-04-12)
+- [x] flutter analyze 경고 0개  ← 통과 (2026-04-12)
+- [x] flutter test 전체 통과  ← 22개 통과 (2026-04-12)
+- [x] OD-003 (라이프 유지 여부) 결정 완료 — 스테이지 간 유지 (2026-04-12)
+- [x] OD-005 (분열 각도) 결정 완료 — 현재 볼 방향 기준 ±30° 랜덤 (2026-04-12)
 ```
 
 ---
