@@ -6,9 +6,11 @@ import 'components/ball.dart';
 import 'components/paddle.dart';
 import 'components/brick.dart';
 import 'components/item_drop.dart';
+import 'components/cannon_laser.dart';
 import 'systems/collision_system.dart';
 import 'systems/item_system.dart';
 import 'systems/stage_loader.dart';
+import '../data/local_storage.dart';
 
 enum GameState { waiting, playing, cleared, gameOver }
 
@@ -22,13 +24,16 @@ class BrickBreakerGame extends FlameGame
   final List<BallComponent> _balls = [];
   final List<BrickComponent> _bricks = [];
   final List<ItemDropComponent> _items = [];
+  final List<CannonLaserComponent> _lasers = [];
   final ItemSystem itemSystem = ItemSystem();
 
   final ValueNotifier<int> livesNotifier = ValueNotifier(3);
+  final ValueNotifier<String?> toastNotifier = ValueNotifier(null);
   int get lives => livesNotifier.value;
   set lives(int v) => livesNotifier.value = v;
 
   GameState state = GameState.waiting;
+  int currentStageId = 1;
 
   @override
   Future<void> onLoad() async {
@@ -104,13 +109,42 @@ class BrickBreakerGame extends FlameGame
       }
     }
 
+    for (final laser in [..._lasers]) {
+      if (laser.isOutOfTop()) {
+        laser.removeFromParent();
+        _lasers.remove(laser);
+      }
+    }
+
+    // 화염포 자동 발사
+    if (itemSystem.updateCannon(dt, _balls)) {
+      _fireCannon();
+    }
+
     if (_bricks.isEmpty && state == GameState.playing) {
       _onCleared();
     }
   }
 
+  void _fireCannon() {
+    final laser = CannonLaserComponent(
+      position: Vector2(_paddle.position.x, _paddle.position.y - _paddle.size.y / 2),
+      onBrickHit: _onLaserHitBrick,
+    );
+    _lasers.add(laser);
+    add(laser);
+    itemSystem.onCannonFired(_balls);
+  }
+
+  void _onLaserHitBrick(BrickComponent brick) {
+    brick.hit();
+    if (brick.isDead) removeBrick(brick);
+    _lasers.removeWhere((l) => !l.isMounted);
+  }
+
   void _onCleared() {
     state = GameState.cleared;
+    LocalStorage.saveStageResult(currentStageId, lives);
     overlays.add(overlayCleared);
   }
 
@@ -149,14 +183,15 @@ class BrickBreakerGame extends FlameGame
   }
 
   void _onItemCollected(String itemId, ItemDropComponent source) {
-    // Bug fix 3: 특정 인스턴스만 제거
     _items.remove(source);
-
     itemSystem.activate(itemId, _balls);
 
+    // 화염포 토스트 안내 (OD-010)
+    if (itemId == 'cannon') {
+      _showToast('🔴 마법 화염포 — 자동 발사 시작!');
+    }
+
     if (itemId == 'split_ball' && _balls.isNotEmpty) {
-      // Bug fix 1: wasNone 조건 제거 — 항상 분열 실행
-      // 이미 분열 중이면 볼 1개로 정규화 후 3개로 다시 분열
       while (_balls.length > 1) {
         final extra = _balls.removeLast();
         extra.removeFromParent();
@@ -168,7 +203,6 @@ class BrickBreakerGame extends FlameGame
           position: b.position.clone(),
           game: this,
         )
-          // Bug fix 2: clone()으로 Vector2 공유 참조 방지
           ..velocity = b.velocity.clone()
           ..paint = b.paint
           ..isLaunched = true;
@@ -176,6 +210,13 @@ class BrickBreakerGame extends FlameGame
         add(ballWithCollision);
       }
     }
+  }
+
+  void _showToast(String message) {
+    toastNotifier.value = message;
+    Future.delayed(const Duration(seconds: 2), () {
+      toastNotifier.value = null;
+    });
   }
 
   void onBallHitBrick() {
@@ -192,6 +233,8 @@ class BrickBreakerGame extends FlameGame
     _bricks.clear();
     for (final item in [..._items]) { item.removeFromParent(); }
     _items.clear();
+    for (final laser in [..._lasers]) { laser.removeFromParent(); }
+    _lasers.clear();
     _paddle.removeFromParent();
 
     itemSystem.reset([]);

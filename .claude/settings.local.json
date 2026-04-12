@@ -9,7 +9,10 @@
       "Read(//d/flutter/**)",
       "Read(//c//**)",
       "Read(//d//**)",
-      "Read(//e//**)"
+      "Read(//e//**)",
+      "Bash(flutter test:*)",
+      "Bash(flutter analyze:*)",
+      "Bash(flutter build:*)"
     ]
   }
 }

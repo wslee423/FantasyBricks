@@ -6,9 +6,12 @@ enum ActiveItem { none, piercingBall, splitBall, cannon }
 
 class ItemSystem {
   static const int maxHits = 10;
+  static const double cannonInterval = 0.5;
 
   ActiveItem current = ActiveItem.none;
   int remainingHits = 0;
+  double _cannonTimer = 0;
+
   final ValueNotifier<ActiveItem> activeItemNotifier =
       ValueNotifier(ActiveItem.none);
   final ValueNotifier<int> remainingHitsNotifier = ValueNotifier(0);
@@ -31,6 +34,7 @@ class ItemSystem {
         }
       case 'cannon':
         current = ActiveItem.cannon;
+        _cannonTimer = 0;
       default:
         return;
     }
@@ -40,7 +44,21 @@ class ItemSystem {
     remainingHitsNotifier.value = remainingHits;
   }
 
-  /// 볼 충돌 1회 발생 시 호출. 만료 여부 반환.
+  /// cannon 활성화 중 매 프레임 호출. 발사 여부 반환.
+  bool updateCannon(double dt, List<BallComponent> balls) {
+    if (current != ActiveItem.cannon) return false;
+    _cannonTimer += dt;
+    if (_cannonTimer >= cannonInterval) {
+      _cannonTimer -= cannonInterval;
+      return true;
+    }
+    return false;
+  }
+
+  /// cannon 발사 1회 = 타격 1회
+  void onCannonFired(List<BallComponent> balls) => onHit(balls);
+
+  /// 볼/레이저 충돌 1회 시 호출. 만료 여부 반환.
   bool onHit(List<BallComponent> balls) {
     if (current == ActiveItem.none) return false;
     remainingHits--;
@@ -53,6 +71,7 @@ class ItemSystem {
   }
 
   bool get isPiercing => current == ActiveItem.piercingBall;
+  bool get isCannon => current == ActiveItem.cannon;
 
   /// 마법 분열구: 현재 볼 기준 ±30° 랜덤으로 2개 추가 생성.
   List<BallComponent> createSplitBalls(BallComponent source) {
@@ -76,6 +95,7 @@ class ItemSystem {
   void _deactivate(List<BallComponent> balls) {
     current = ActiveItem.none;
     remainingHits = 0;
+    _cannonTimer = 0;
     activeItemNotifier.value = ActiveItem.none;
     remainingHitsNotifier.value = 0;
     for (final b in balls) {

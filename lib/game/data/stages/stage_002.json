@@ -1,0 +1,38 @@
+{
+  "stage_id": 2,
+  "theme": "forest",
+  "grid_cols": 7,
+  "grid_rows": 10,
+  "bricks": [
+    { "col": 0, "row": 0, "hp": 2, "item_drop": null },
+    { "col": 1, "row": 0, "hp": 1, "item_drop": null },
+    { "col": 2, "row": 0, "hp": 2, "item_drop": "piercing_ball" },
+    { "col": 3, "row": 0, "hp": 1, "item_drop": null },
+    { "col": 4, "row": 0, "hp": 2, "item_drop": null },
+    { "col": 5, "row": 0, "hp": 1, "item_drop": "split_ball" },
+    { "col": 6, "row": 0, "hp": 2, "item_drop": null },
+
+    { "col": 0, "row": 1, "hp": 1, "item_drop": null },
+    { "col": 2, "row": 1, "hp": 2, "item_drop": null },
+    { "col": 3, "row": 1, "hp": 1, "item_drop": "cannon" },
+    { "col": 4, "row": 1, "hp": 2, "item_drop": null },
+    { "col": 6, "row": 1, "hp": 1, "item_drop": null },
+
+    { "col": 1, "row": 2, "hp": 2, "item_drop": null },
+    { "col": 2, "row": 2, "hp": 1, "item_drop": null },
+    { "col": 3, "row": 2, "hp": 2, "item_drop": "piercing_ball" },
+    { "col": 4, "row": 2, "hp": 1, "item_drop": null },
+    { "col": 5, "row": 2, "hp": 2, "item_drop": null },
+
+    { "col": 0, "row": 3, "hp": 1, "item_drop": null },
+    { "col": 1, "row": 3, "hp": 2, "item_drop": null },
+    { "col": 2, "row": 3, "hp": 1, "item_drop": null },
+    { "col": 4, "row": 3, "hp": 1, "item_drop": null },
+    { "col": 5, "row": 3, "hp": 2, "item_drop": null },
+    { "col": 6, "row": 3, "hp": 1, "item_drop": null },
+
+    { "col": 2, "row": 4, "hp": 2, "item_drop": "split_ball" },
+    { "col": 3, "row": 4, "hp": 1, "item_drop": null },
+    { "col": 4, "row": 4, "hp": 2, "item_drop": null }
+  ]
+}

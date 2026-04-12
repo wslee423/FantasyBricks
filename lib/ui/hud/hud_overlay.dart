@@ -54,6 +54,24 @@ class HudOverlay extends StatelessWidget {
               );
             },
           ),
+          ValueListenableBuilder<String?>(
+            valueListenable: game.toastNotifier,
+            builder: (context, toast, _) {
+              if (toast == null) return const SizedBox.shrink();
+              return Container(
+                margin: const EdgeInsets.only(top: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                decoration: BoxDecoration(
+                  color: Colors.black87,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Text(
+                  toast,
+                  style: const TextStyle(color: Colors.white, fontSize: 13),
+                ),
+              );
+            },
+          ),
         ],
       ),
     );
