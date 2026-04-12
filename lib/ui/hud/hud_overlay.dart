@@ -13,35 +13,7 @@ class HudOverlay extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ValueListenableBuilder<int>(
-                  valueListenable: game.livesNotifier,
-                  builder: (context, lives, _) {
-                    return Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: List.generate(3, (i) {
-                        final filled = i < lives;
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 4),
-                          child: Icon(
-                            filled ? Icons.favorite : Icons.favorite_border,
-                            color: filled
-                                ? const Color(0xFFFF4D6D)
-                                : const Color(0xFF8B7FA8),
-                            size: 28,
-                          ),
-                        );
-                      }),
-                    );
-                  },
-                ),
-              ],
-            ),
-          ),
+          _buildLivesBar(),
           ValueListenableBuilder<ActiveItem>(
             valueListenable: game.itemSystem.activeItemNotifier,
             builder: (context, activeItem, _) {
@@ -58,21 +30,54 @@ class HudOverlay extends StatelessWidget {
             valueListenable: game.toastNotifier,
             builder: (context, toast, _) {
               if (toast == null) return const SizedBox.shrink();
-              return Container(
-                margin: const EdgeInsets.only(top: 8),
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                decoration: BoxDecoration(
-                  color: Colors.black87,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Text(
-                  toast,
-                  style: const TextStyle(color: Colors.white, fontSize: 13),
-                ),
-              );
+              return _ToastBanner(message: toast);
             },
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildLivesBar() {
+    return Container(
+      margin: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+      decoration: BoxDecoration(
+        color: const Color(0xCC0D0620),
+        border: Border.all(color: const Color(0x88B39DDB), width: 1),
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: ValueListenableBuilder<int>(
+        valueListenable: game.livesNotifier,
+        builder: (context, lives, _) {
+          return Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                '생명력  ',
+                style: TextStyle(
+                  color: Color(0xFFB39DDB),
+                  fontSize: 12,
+                  letterSpacing: 1.5,
+                ),
+              ),
+              ...List.generate(3, (i) {
+                final filled = i < lives;
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 3),
+                  child: Icon(
+                    filled ? Icons.favorite : Icons.favorite_border,
+                    color: filled
+                        ? const Color(0xFFFF4D6D)
+                        : const Color(0x664D3060),
+                    size: 22,
+                  ),
+                );
+              }),
+            ],
+          );
+        },
       ),
     );
   }
@@ -84,50 +89,91 @@ class _ItemHud extends StatelessWidget {
 
   const _ItemHud({required this.item, required this.remaining});
 
+  static const _itemData = {
+    ActiveItem.piercingBall: (symbol: '◈', name: '마법 관통석', color: Color(0xFF4FC3F7)),
+    ActiveItem.splitBall:    (symbol: '✦', name: '마법 분열구', color: Color(0xFFFFD54F)),
+    ActiveItem.cannon:       (symbol: '⚡', name: '마법 화염포', color: Color(0xFFEF5350)),
+    ActiveItem.none:         (symbol: '',  name: '',           color: Colors.white),
+  };
+
   @override
   Widget build(BuildContext context) {
-    final (label, color) = switch (item) {
-      ActiveItem.piercingBall => ('🔵 마법 관통석', const Color(0xFF4FC3F7)),
-      ActiveItem.splitBall => ('🟡 마법 분열구', const Color(0xFFFFD54F)),
-      ActiveItem.cannon => ('🔴 마법 화염포', const Color(0xFFEF5350)),
-      ActiveItem.none => ('', Colors.white),
-    };
-
+    final data = _itemData[item]!;
     final ratio = remaining / ItemSystem.maxHits;
 
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 24),
+      margin: const EdgeInsets.fromLTRB(16, 6, 16, 0),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: Colors.black45,
-        borderRadius: BorderRadius.circular(8),
+        color: const Color(0xCC0D0620),
+        border: Border.all(
+          color: data.color.withValues(alpha: 0.6),
+          width: 1,
+        ),
+        borderRadius: BorderRadius.circular(4),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            label,
-            style: TextStyle(color: color, fontSize: 13),
+            data.symbol,
+            style: TextStyle(color: data.color, fontSize: 14),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 6),
+          Text(
+            data.name,
+            style: TextStyle(
+              color: data.color,
+              fontSize: 12,
+              letterSpacing: 1,
+            ),
+          ),
+          const SizedBox(width: 10),
           SizedBox(
-            width: 80,
-            height: 8,
+            width: 72,
+            height: 6,
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(4),
+              borderRadius: BorderRadius.circular(3),
               child: LinearProgressIndicator(
                 value: ratio,
-                backgroundColor: Colors.white24,
-                valueColor: AlwaysStoppedAnimation<Color>(color),
+                backgroundColor: Colors.white12,
+                valueColor: AlwaysStoppedAnimation<Color>(data.color),
               ),
             ),
           ),
           const SizedBox(width: 6),
           Text(
-            '$remaining회',
-            style: const TextStyle(color: Colors.white70, fontSize: 12),
+            '×$remaining',
+            style: const TextStyle(color: Color(0xFFB39DDB), fontSize: 11),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _ToastBanner extends StatelessWidget {
+  final String message;
+
+  const _ToastBanner({required this.message});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(top: 8, left: 32, right: 32),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      decoration: BoxDecoration(
+        color: const Color(0xEE1A0A3D),
+        border: Border.all(color: const Color(0x99FFD700), width: 1),
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Text(
+        message,
+        style: const TextStyle(
+          color: Color(0xFFE0D0FF),
+          fontSize: 13,
+          letterSpacing: 0.5,
+        ),
       ),
     );
   }
