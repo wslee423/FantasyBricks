@@ -53,8 +53,8 @@ class LocalStorage {
   static bool isTutorialDone() => _p.getBool(_keyTutorialDone) ?? false;
   static Future<void> setTutorialDone() => _p.setBool(_keyTutorialDone, true);
 
-  // 장착 볼 스킨
-  static String getEquippedSkin() => _p.getString(_keyEquippedSkin) ?? 'fire_red';
+  // 장착 볼 스킨 (기본값 '' = 스킨 없음 → 흰색 볼)
+  static String getEquippedSkin() => _p.getString(_keyEquippedSkin) ?? '';
   static Future<void> setEquippedSkin(String skinId) =>
       _p.setString(_keyEquippedSkin, skinId);
 

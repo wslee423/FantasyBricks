@@ -193,7 +193,7 @@ class BrickBreakerGame extends FlameGame
 
   void _onItemCollected(String itemId, ItemDropComponent source) {
     _items.remove(source);
-    itemSystem.activate(itemId, _balls);
+    itemSystem.activate(itemId, _balls, skinColor: _ballSkinColor);
 
     // 화염포 토스트 안내 (OD-010)
     if (itemId == 'cannon') {
@@ -214,6 +214,7 @@ class BrickBreakerGame extends FlameGame
           skinColor: _ballSkinColor,
         )
           ..velocity = b.velocity.clone()
+          ..paint = b.paint  // createSplitBalls가 설정한 노란색 유지
           ..isLaunched = true;
         _balls.add(ballWithCollision);
         add(ballWithCollision);

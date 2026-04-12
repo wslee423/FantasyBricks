@@ -98,8 +98,8 @@ void main() {
       await LocalStorage.init();
     });
 
-    test('기본 장착 스킨은 fire_red다', () {
-      expect(LocalStorage.getEquippedSkin(), 'fire_red');
+    test('기본 장착 스킨은 빈 문자열이다 (스킨 미장착 = 흰색 볼)', () {
+      expect(LocalStorage.getEquippedSkin(), '');
     });
 
     test('setEquippedSkin 후 getEquippedSkin이 일치한다', () async {

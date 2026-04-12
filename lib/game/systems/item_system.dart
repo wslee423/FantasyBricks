@@ -11,6 +11,7 @@ class ItemSystem {
   ActiveItem current = ActiveItem.none;
   int remainingHits = 0;
   double _cannonTimer = 0;
+  Color _skinColor = const Color(0xFFFFFFFF);
 
   final ValueNotifier<ActiveItem> activeItemNotifier =
       ValueNotifier(ActiveItem.none);
@@ -18,7 +19,9 @@ class ItemSystem {
 
   static final math.Random _random = math.Random();
 
-  void activate(String itemId, List<BallComponent> balls) {
+  /// [skinColor]: 아이템 만료 시 복원할 볼 스킨 색.
+  void activate(String itemId, List<BallComponent> balls, {Color skinColor = const Color(0xFFFFFFFF)}) {
+    _skinColor = skinColor;
     _deactivate(balls);
 
     switch (itemId) {
@@ -34,6 +37,9 @@ class ItemSystem {
         }
       case 'cannon':
         current = ActiveItem.cannon;
+        for (final b in balls) {
+          b.paint = Paint()..color = const Color(0xFFEF5350);
+        }
         _cannonTimer = 0;
       default:
         return;
@@ -99,7 +105,7 @@ class ItemSystem {
     activeItemNotifier.value = ActiveItem.none;
     remainingHitsNotifier.value = 0;
     for (final b in balls) {
-      b.paint = Paint()..color = const Color(0xFFFFFFFF);
+      b.paint = Paint()..color = _skinColor;
     }
   }
 
