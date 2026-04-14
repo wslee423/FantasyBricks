@@ -10,20 +10,14 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flame: ^1.18.0          # OD-015: 버전 고정 필요 — 설치 후 최신 1.x 확인
-  hive: ^2.2.3
-  hive_flutter: ^1.1.0
+  flame: ^1.18.0
   shared_preferences: ^2.2.0
-  flutter_riverpod: ^2.4.0
-  flame_audio: ^2.1.0
   google_mobile_ads: ^5.1.0  # OD-016: AdMob 배너 + 리워드 광고
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^3.0.0
-  hive_generator: ^2.0.0
-  build_runner: ^2.4.0
 
 flutter:
   uses-material-design: true

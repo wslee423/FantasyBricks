@@ -12,6 +12,20 @@ const _hpColors = {
 };
 
 class BrickComponent extends RectangleComponent with CollisionCallbacks {
+  // 정적 캐시 — render()에서 매 프레임 Paint 객체 생성 방지
+  static final _highlightTopPaint = Paint()
+    ..color = const Color(0x2EFFFFFF);
+  static final _highlightLeftPaint = Paint()
+    ..color = const Color(0x1AFFFFFF);
+  static final _shadowBottomPaint = Paint()
+    ..color = const Color(0x73000000);
+  static final _shadowRightPaint = Paint()
+    ..color = const Color(0x59000000);
+  static final _itemBorderPaint = Paint()
+    ..color = const Color(0x80FFD700)
+    ..style = PaintingStyle.stroke
+    ..strokeWidth = 1.0;
+
   int hp;
   final String? itemDrop;
 
@@ -52,31 +66,28 @@ class BrickComponent extends RectangleComponent with CollisionCallbacks {
     // 상단 + 좌측 하이라이트 (빛이 위에서 닿는 면)
     canvas.drawRect(
       Rect.fromLTWH(0, 0, size.x, 2.5),
-      Paint()..color = Colors.white.withValues(alpha: 0.18),
+      _highlightTopPaint,
     );
     canvas.drawRect(
       Rect.fromLTWH(0, 0, 2.0, size.y),
-      Paint()..color = Colors.white.withValues(alpha: 0.10),
+      _highlightLeftPaint,
     );
 
     // 하단 + 우측 그림자 (돌의 깊이감)
     canvas.drawRect(
       Rect.fromLTWH(0, size.y - 2.5, size.x, 2.5),
-      Paint()..color = Colors.black.withValues(alpha: 0.45),
+      _shadowBottomPaint,
     );
     canvas.drawRect(
       Rect.fromLTWH(size.x - 2.0, 0, 2.0, size.y),
-      Paint()..color = Colors.black.withValues(alpha: 0.35),
+      _shadowRightPaint,
     );
 
     // ── 마법 룬 금색 테두리 (아이템 드롭 힌트) ────────────
     if (itemDrop != null) {
       canvas.drawRect(
         Rect.fromLTWH(0.5, 0.5, size.x - 1, size.y - 1),
-        Paint()
-          ..color = const Color(0xFFFFD700).withValues(alpha: 0.5)
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 1.0,
+        _itemBorderPaint,
       );
     }
   }

@@ -1,17 +1,87 @@
-# fantasy_bricks
+# Fantasy Bricks
 
-A new Flutter project.
+> 마법사의 탑을 무너뜨려라 — 중세 판타지 벽돌깨기 캐주얼 게임
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## 배경 & 컨셉
 
-A few resources to get you started if this is your first Flutter project:
+어둠의 마법사가 봉인한 탑에 갇힌 수정들을 해방시켜야 한다.  
+플레이어는 마법 구슬을 조종해 탑을 지키는 마법석 벽돌들을 파괴하고,  
+벽돌에서 떨어지는 마법 아이템을 흡수해 더 강력한 공격을 펼친다.
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+클래식 벽돌깨기의 조작감에 판타지 RPG의 아이템·수집 시스템을 더했다.  
+스테이지를 클리어할수록 벽돌은 더 단단해지고, 더 희귀한 마법 아이템이 등장한다.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+---
+
+## 게임 요약
+
+| 항목 | 내용 |
+|------|------|
+| 장르 | 벽돌깨기 캐주얼 |
+| 플랫폼 | Android |
+| 스테이지 | 10개 |
+| 조작 | 화면 터치 드래그로 패들 이동, 탭으로 발사 |
+
+### 마법석 벽돌
+
+HP에 따라 색이 변하며, 깨질수록 빛이 새어 나온다.
+
+| HP | 이름 | 색상 |
+|----|------|------|
+| 5 | 흑요석 | 칠흑 |
+| 4 | 심연 청금석 | 짙은 남색 |
+| 3 | 자수정 | 보라 |
+| 2 | 보라 수정 | 연보라 |
+| 1 | 파쇄 수정 | 밝은 라벤더 |
+
+### 마법 아이템 (벽돌 파괴 시 드롭)
+
+| 심볼 | 이름 | 효과 |
+|------|------|------|
+| ◈ | 마법 관통석 | 볼이 벽돌을 관통 (10회) |
+| ✦ | 마법 분열구 | 볼이 3개로 분열 |
+| ⚡ | 마법 화염포 | 0.5초마다 자동 레이저 발사 (10회) |
+
+### 볼 스킨 가챠
+
+- 코인 30개로 1회 소환
+- 등급: 일반 / 희귀 / 전설
+- 중복 뽑기 시 파편 획득 → 30개 모으면 교환
+- 광고 시청으로 코인 획득 (일 5회)
+
+---
+
+## APK 다운로드 (Android)
+
+최신 버전: **v0.1.0**
+
+**[⬇ app-release.apk 다운로드](https://github.com/wslee423/FantasyBricks/releases/download/v0.1.0/app-release.apk)**
+
+### 설치 방법
+1. 위 링크에서 APK 파일 다운로드
+2. Android 설정 → 보안 → **출처를 알 수 없는 앱 허용** 활성화
+3. 다운로드된 APK 파일 탭 → 설치
+
+> Android 7.0 (API 24) 이상 지원
+
+---
+
+## 기술 스택
+
+- **Flutter** 3.x + **Flame** 1.18 (게임 엔진)
+- **SharedPreferences** (로컬 저장소)
+- **Google Mobile Ads** (AdMob 배너 + 리워드 광고)
+
+---
+
+## 개발 현황
+
+| Phase | 내용 | 상태 |
+|-------|------|------|
+| Phase 0 | 프로젝트 셋업 | ✅ 완료 |
+| Phase 1 | MVP (볼·패들·벽돌·아이템) | ✅ 완료 |
+| Phase 2 | 콘텐츠 확장 (스테이지 10개) | ✅ 완료 |
+| Phase 3 | 로비·가챠·볼 스킨·광고 | ✅ 완료 |
+| Phase 4 | 출시 준비 | 🔄 진행 중 |

@@ -25,6 +25,8 @@ class ItemDropComponent extends CircleComponent with CollisionCallbacks {
   final void Function(String itemId) onCollected;
 
   late final Color _color;
+  late final Paint _ringPaint;
+  late final Paint _highlightPaint;
 
   ItemDropComponent({
     required Vector2 position,
@@ -43,6 +45,11 @@ class ItemDropComponent extends CircleComponent with CollisionCallbacks {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
+    _ringPaint = Paint()
+      ..color = _color.withValues(alpha: 0.55)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2.5;
+    _highlightPaint = Paint()..color = Colors.white.withValues(alpha: 0.28);
     add(CircleHitbox());
     add(
       TextComponent(
@@ -67,16 +74,13 @@ class ItemDropComponent extends CircleComponent with CollisionCallbacks {
     canvas.drawCircle(
       const Offset(_radius, _radius),
       _radius - 1,
-      Paint()
-        ..color = _color.withValues(alpha: 0.55)
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 2.5,
+      _ringPaint,
     );
     // 내부 하이라이트
     canvas.drawCircle(
       const Offset(11, 11),
       3.5,
-      Paint()..color = Colors.white.withValues(alpha: 0.28),
+      _highlightPaint,
     );
   }
 

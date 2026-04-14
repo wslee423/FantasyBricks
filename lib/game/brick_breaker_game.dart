@@ -260,12 +260,20 @@ class BrickBreakerGame extends FlameGame
 
 class _BallWithCollision extends BallComponent {
   final BrickBreakerGame game;
+  // 같은 프레임에 인접한 두 벽돌에 동시 충돌할 때 이중 반사 방지
+  bool _hasReflectedThisFrame = false;
 
   _BallWithCollision({
     required super.position,
     required this.game,
     super.skinColor = const Color(0xFFFFFFFF),
   });
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+    _hasReflectedThisFrame = false;
+  }
 
   @override
   void onCollisionStart(
@@ -275,7 +283,13 @@ class _BallWithCollision extends BallComponent {
     super.onCollisionStart(intersectionPoints, other);
     if (other is BrickComponent) {
       if (!game.itemSystem.isPiercing) {
-        CollisionSystem.handleBallBrick(this, other);
+        if (!_hasReflectedThisFrame) {
+          CollisionSystem.handleBallBrick(this, other);
+          _hasReflectedThisFrame = true;
+        } else {
+          // 같은 프레임 두 번째 벽돌 — 반사 없이 데미지만
+          other.hit();
+        }
       } else {
         other.hit();
       }

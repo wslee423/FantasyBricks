@@ -14,7 +14,11 @@ class AdService {
   static BannerAd? _banner;
 
   static Future<void> init() async {
-    await MobileAds.instance.initialize();
+    try {
+      await MobileAds.instance.initialize();
+    } catch (_) {
+      // 광고 초기화 실패 시에도 앱은 정상 동작
+    }
   }
 
   // ── 배너 ──────────────────────────────────────────────

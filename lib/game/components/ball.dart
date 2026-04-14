@@ -28,7 +28,7 @@ class BallComponent extends CircleComponent with CollisionCallbacks {
   void update(double dt) {
     super.update(dt);
     if (!isLaunched) return;
-    position += velocity * dt;
+    position.addScaled(velocity, dt);
   }
 
   void launch() {
